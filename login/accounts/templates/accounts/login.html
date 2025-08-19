@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #162841 0%, #23406c 100%);
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .login-container {
+      background: #192a3a;
+      border-radius: 16px 16px 16px 16px;
+      box-shadow: 0 8px 32px rgba(25, 118, 210, 0.15);
+      padding: 5px 65px 50px 40px;
+      width: 100%;
+      max-width: 370px;
+      text-align: center;
+    }
+    .login-container h2 {
+      color: #e3f0ff;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+    .login-container label {
+      display: block;
+      text-align: left;
+      color: #90caf9;
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+    }
+    .login-container input[type="email"],
+    .login-container input[type="password"] {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      margin-bottom: 1.1rem;
+      border: 1.5px solid #b3d1f7;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #22334a;
+      color: #e3f0ff;
+      transition: border 0.2s;
+    }
+    .login-container input:focus {
+      border: 1.5px solid #1976d2;
+      outline: none;
+    }
+    .login-container button {
+      width: 100%;
+      padding: 0.8rem;
+      background: linear-gradient(90deg, #1976d2 60%, #2196f3 100%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
+      transition: background 0.2s, transform 0.1s;
+    }
+    .login-container button:active {
+      transform: scale(0.98);
+    }
+    .login-container .error {
+      color: #d32f2f;
+      margin-bottom: 1rem;
+      font-size: 0.98rem;
+    }
+    .login-container .register-link {
+      margin-top: 1.2rem;
+      font-size: 0.97rem;
+    }
+    .login-container .register-link a {
+      color: #90caf9;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .login-container .register-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Login</h2>
+    <form method="post" autocomplete="off" id="loginForm">
+      {% csrf_token %}
+      <label for="id_email">Email</label>
+      {{ form.email }}
+      <label for="id_password">Password</label>
+      {{ form.password }}
+      {% if form.non_field_errors %}
+        <div class="error">{{ form.non_field_errors }}</div>
+      {% endif %}
+      <button type="submit" id="loginBtn">Login</button>
+    </form>
+    <div class="register-link">
+      No account? <a href="{% url 'register' %}">Register</a>
+    </div>
+  </div>
+  <script>
+    // Button animation
+    const btn = document.getElementById('loginBtn');
+    btn.addEventListener('mousedown', function() {
+      btn.style.background = 'linear-gradient(90deg, #1565c0 60%, #1976d2 100%)';
+    });
+    btn.addEventListener('mouseup', function() {
+      btn.style.background = 'linear-gradient(90deg, #1976d2 60%, #2196f3 100%)';
+    });
+  </script>
+</body>
+</html>
