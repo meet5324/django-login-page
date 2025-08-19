@@ -1,6 +1,6 @@
 # Django Login Page
 
-A modern, professional Django login/register system with a blue-themed UI, user profile (with designation), and account deletion feature.
+A modern, professional Django login/register system, user profile (with designation), and account deletion feature.
 
 ## Features
 
@@ -9,7 +9,6 @@ A modern, professional Django login/register system with a blue-themed UI, user 
 - Home page displays user info and designation
 - Delete account button (with confirmation)
 - Consistent, beautiful blue UI (HTML, CSS, JS)
-- Django best practices: `.gitignore`, no tracked venv or cache files
 
 ## Quick Start
 
@@ -54,6 +53,3 @@ A modern, professional Django login/register system with a blue-themed UI, user 
 - The `venv` folder and all `__pycache__` files are ignored.
 - If you want to customize the UI, edit the HTML/CSS in `accounts/templates/accounts/`.
 
----
-
-Made with ❤️ using Django.
