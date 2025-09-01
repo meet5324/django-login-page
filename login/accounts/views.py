@@ -15,7 +15,10 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render
 from django.views import View
-from .forms import RegistrationForm, EmailAuthenticationForm
+from .forms import RegistrationForm, UsernameAuthenticationForm
+
+# JWT imports
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 class RegisterView(View):
     template_name = "accounts/register.html"  # folder 'accounts'
@@ -24,9 +27,8 @@ class RegisterView(View):
     def post(self, request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect("home")
+                user = form.save()
+                return redirect("login")
         return render(request, self.template_name, {"form": form})
 
 class LoginView(View):
@@ -34,9 +36,10 @@ class LoginView(View):
     def get(self, request):
         if request.user.is_authenticated:
             return redirect("home")
-        return render(request, self.template_name, {"form": EmailAuthenticationForm()})
+        return render(request, self.template_name, {"form": UsernameAuthenticationForm()})
+
     def post(self, request):
-        form = EmailAuthenticationForm(request.POST)
+        form = UsernameAuthenticationForm(request.POST)
         if form.is_valid():
             login(request, form.get_user())
             return redirect("home")

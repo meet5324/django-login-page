@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 class RegistrationForm(forms.ModelForm):
     user_id = forms.CharField(label="User ID", max_length=150)
     designation = forms.CharField(max_length=100, required=False)
+    phone_number = forms.CharField(label="Phone Number", max_length=20, required=True)
     password = forms.CharField(widget=forms.PasswordInput)
     password_confirm = forms.CharField(widget=forms.PasswordInput, label="Confirm Password")
 
@@ -34,25 +35,26 @@ class RegistrationForm(forms.ModelForm):
         return cleaned
 
     def save(self, commit=True):
-        user = User(
-            username=self.cleaned_data["user_id"],
-            first_name=self.cleaned_data["first_name"],
-            last_name=self.cleaned_data["last_name"],
-            email=self.cleaned_data["email"],
-        )
-        user.set_password(self.cleaned_data["password"])
-        if commit:
-            user.save()
-            # Ensure Profile exists and update designation
-            from .models import Profile
-            profile, created = Profile.objects.get_or_create(user=user)
-            profile.designation = self.cleaned_data.get("designation", "")
-            profile.save()
-        return user
+            user = User(
+                username=self.cleaned_data["user_id"],
+                first_name=self.cleaned_data["first_name"],
+                last_name=self.cleaned_data["last_name"],
+                email=self.cleaned_data["email"],
+            )
+            user.set_password(self.cleaned_data["password"])
+            if commit:
+                user.save()
+                # Ensure Profile exists and update designation and phone_number
+                from .models import Profile
+                profile, created = Profile.objects.get_or_create(user=user)
+                profile.designation = self.cleaned_data.get("designation", "")
+                profile.phone_number = self.cleaned_data.get("phone_number", "")
+                profile.save()
+            return user
 
 
-class EmailAuthenticationForm(forms.Form):
-    email = forms.EmailField()
+class UsernameAuthenticationForm(forms.Form):
+    username = forms.CharField(label="Username")
     password = forms.CharField(widget=forms.PasswordInput)
 
     def __init__(self, *args, **kwargs):
@@ -61,18 +63,13 @@ class EmailAuthenticationForm(forms.Form):
 
     def clean(self):
         cleaned = super().clean()
-        email = (cleaned.get("email") or "").strip().lower()
+        username = cleaned.get("username")
         password = cleaned.get("password")
 
-        if email and password:
-            try:
-                user_obj = User.objects.get(email__iexact=email)
-            except User.DoesNotExist:
-                raise ValidationError("Invalid email or password.")
-
-            user = authenticate(username=user_obj.username, password=password)
+        if username and password:
+            user = authenticate(username=username, password=password)
             if user is None:
-                raise ValidationError("Invalid email or password.")
+                raise ValidationError("Invalid username or password.")
             if not user.is_active:
                 raise ValidationError("This account is inactive.")
             self.user_cache = user
