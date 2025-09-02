@@ -1,14 +1,18 @@
 # Django Login Page
 
-A modern, professional Django login/register system, user profile (with designation), and account deletion feature.
+A modern, professional Django login/register system, user profile (with designation), JWT authentication, email notifications, and account deletion feature.
 
 ## Features
 
 - User registration with first name, last name, email, user ID, password, and designation
-- User login with email and password
+- Welcome email sent on registration
+- User login with username and password
+- Login notification email sent to user
+- JWT authentication endpoints (API)
 - Home page displays user info and designation
 - Delete account button (with confirmation)
 - Consistent, beautiful blue UI (HTML, CSS, JS)
+- Secure credentials using `.env` (never pushed to GitHub)
 
 ## Quick Start
 
@@ -30,18 +34,27 @@ A modern, professional Django login/register system, user profile (with designat
    ```
    *(Create `requirements.txt` if needed: `pip freeze > requirements.txt`)*
 
-4. **Run migrations:**
+4. **Configure environment variables:**
+   - Copy `.env.example` to `.env` and add your email credentials and secret key.
+
+5. **Run migrations:**
    ```bash
    python manage.py migrate
    ```
 
-5. **Start the server:**
+6. **Start the server:**
    ```bash
    python manage.py runserver
    ```
 
-6. **Visit:**
+7. **Visit:**
    [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+
+## JWT API Endpoints
+
+- `/api/token/` - Obtain JWT token
+- `/api/token/refresh/` - Refresh JWT token
+- `/api/register/` - Register via API
 
 ## Screenshots
 
@@ -52,4 +65,4 @@ A modern, professional Django login/register system, user profile (with designat
 - The `.env` file is ignored for security.
 - The `venv` folder and all `__pycache__` files are ignored.
 - If you want to customize the UI, edit the HTML/CSS in `accounts/templates/accounts/`.
-
+- Email notifications require valid Gmail app password in `.env`.
